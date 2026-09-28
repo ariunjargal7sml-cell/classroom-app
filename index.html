@@ -3,237 +3,426 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ангийн Удирдлагын Систем</title>
+    <title>Бидний Төсөл - Ангийн Удирдлагын Систем</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --bg-light: #F9FAFB;
+            --card-bg: #FFFFFF;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
         body {
-            background-color: #f4f7f6;
-            color: #333;
-            padding: 20px;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
+        /* Nav Header */
         header {
-            background-color: #4A90E2;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: var(--card-bg);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .container {
-            max-width: 1000px;
+        .nav-container {
+            max-width: 1100px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 2fr;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
             gap: 20px;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
+        nav a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            cursor: pointer;
         }
 
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        nav a:hover, nav a.active {
+            color: var(--primary);
+            background-color: #EEF2FF;
         }
 
-        .card h2 {
-            margin-bottom: 15px;
-            color: #4A90E2;
-            font-size: 1.2rem;
-            border-bottom: 2px solid #f4f7f6;
-            padding-bottom: 8px;
+        .teacher-btn {
+            background-color: var(--primary);
+            color: white !important;
         }
 
-        .form-group {
-            margin-bottom: 12px;
+        .teacher-btn:hover {
+            background-color: var(--primary-hover) !important;
         }
 
-        .form-group label {
+        /* Content Container */
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .page-section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .page-section.active {
             display: block;
-            margin-bottom: 5px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards & Grid */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Forms & Inputs */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
             font-weight: 600;
             font-size: 0.9rem;
         }
 
-        .form-group input, .form-group select {
+        input, textarea, select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            padding: 10px 14px;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
             outline: none;
+            font-size: 1rem;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         }
 
         button {
-            width: 100%;
-            background-color: #4A90E2;
+            background-color: var(--primary);
             color: white;
             border: none;
-            padding: 10px;
-            border-radius: 5px;
-            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: background 0.2s;
         }
 
         button:hover {
-            background-color: #357ABD;
+            background-color: var(--primary-hover);
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
+        /* Lists & Tables */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
         }
 
-        table th, table td {
-            border: 1px solid #e0e0e0;
-            padding: 10px;
-            text-align: left;
-            font-size: 0.9rem;
+        .item-card {
+            background: white;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 1.2rem;
         }
 
-        table th {
-            background-color: #f8f9fa;
-            color: #555;
-        }
-
-        .status-present {
-            color: green;
-            font-weight: bold;
-        }
-
-        .status-absent {
-            color: red;
-            font-weight: bold;
-        }
-
-        .btn-delete {
-            background-color: #e74c3c;
-            padding: 5px 10px;
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
             font-size: 0.8rem;
-            width: auto;
+            font-weight: bold;
+            background: #EEF2FF;
+            color: var(--primary);
         }
 
-        .btn-delete:hover {
-            background-color: #c0392b;
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid #E5E7EB;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>🏫 Ангийн Удирдлагын Систем</h1>
-        <p>Сурагчдын бүртгэл болон ирц, дүнг удирдах веб систем</p>
+        <div class="nav-container">
+            <div class="logo"><i class="fa-solid fa-graduation-cap"></i> Бидний Төсөл</div>
+            <nav>
+                <ul>
+                    <li><a class="active" onclick="showPage('about')">Танилцуулга</a></li>
+                    <li><a onclick="showPage('program')">Хөтөлбөр</a></li>
+                    <li><a onclick="showPage('tasks')">Даалгавар</a></li>
+                    <li><a onclick="showPage('feedback')">Саналууд</a></li>
+                    <li><a class="teacher-btn" onclick="openLoginModal()" id="teacherMenu">Багш нэвтрэх</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <div class="container">
-        <!-- Сурагч нэмэх хэсэг -->
-        <div class="card">
-            <h2>➕ Шинэ сурагч бүртгэх</h2>
-            <form id="studentForm">
-                <div class="form-group">
-                    <label for="name">Овог Нэр:</label>
-                    <input type="text" id="name" placeholder="Д. Болд" required>
+    <main>
+        <!-- 1. ТАНИЛЦУУЛГА ХЭСЭГ -->
+        <section id="about" class="page-section active">
+            <div class="card">
+                <h2><i class="fa-solid fa-school"></i> Ангийн Танилцуулга</h2>
+                <p style="line-height: 1.6; color: var(--text-muted);" id="aboutText">
+                    Манай сургалтын системд тайвтай морилно уу. Энэхүү систем нь сурагчдын сурлагын идэвхийг дэмжих, багш болон сурагчдын хоорондын харилцааг сайжруулах зорилготой.
+                </p>
+            </div>
+            <div class="card">
+                <h2><i class="fa-solid fa-bullhorn"></i> Ангийн Зарлал</h2>
+                <div id="announcementList" class="grid-cards">
+                    <div class="item-card">
+                        <span class="badge">Онцлох</span>
+                        <h3 style="margin: 8px 0;">Шинэ улирлын хичээл эхэллээ</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Идэвхтэй оролцож даалгавраа хугацаанд нь хийгээрэй.</p>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="code">Сурагчийн код:</label>
-                    <input type="text" id="code" placeholder="ST101" required>
-                </div>
-                <div class="form-group">
-                    <label for="status">Ирцийн төлөв:</label>
-                    <select id="status">
-                        <option value="Ирсэн">Ирсэн</option>
-                        <option value="Тасалсан">Тасалсан</option>
-                        <option value="Чөлөөтэй">Чөлөөтэй</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="grade">Голч дүн:</label>
-                    <input type="number" id="grade" min="0" max="100" placeholder="85">
-                </div>
-                <button type="submit">Хадгалах</button>
-            </form>
-        </div>
+            </div>
+        </section>
 
-        <!-- Сурагчдын жагсаалт -->
-        <div class="card">
-            <h2>📋 Сурагчдын жагсаалт</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Код</th>
-                        <th>Нэр</th>
-                        <th>Ирц</th>
-                        <th>Дүн</th>
-                        <th>Үйлдэл</th>
-                    </tr>
-                </thead>
-                <tbody id="studentList">
-                    <!-- Анхны жишээ дата -->
-                    <tr>
-                        <td>ST101</td>
-                        <td>Б. Бат-Эрдэнэ</td>
-                        <td><span class="status-present">Ирсэн</span></td>
-                        <td>92%</td>
-                        <td><button class="btn-delete" onclick="deleteRow(this)">Усгах</button></td>
-                    </tr>
-                    <tr>
-                        <td>ST102</td>
-                        <td>С. Номин</td>
-                        <td><span class="status-absent">Тасалсан</span></td>
-                        <td>78%</td>
-                        <td><button class="btn-delete" onclick="deleteRow(this)">Усгах</button></td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- 2. ХӨТӨЛБӨР ХЭСЭГ -->
+        <section id="program" class="page-section">
+            <div class="card">
+                <h2><i class="fa-solid fa-book-open"></i> Хичээлийн Хөтөлбөр</h2>
+                <div id="programList" class="grid-cards">
+                    <div class="item-card">
+                        <h3>1. HTML & CSS Үндэс</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Веб хуудасны бүтэц ба дизайн бүтээх.</p>
+                    </div>
+                    <div class="item-card">
+                        <h3>2. JavaScript Програмчлал</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Веб хуудсыг интерактив болгох.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. ДААЛГАВАР ХЭСЭГ -->
+        <section id="tasks" class="page-section">
+            <div class="card">
+                <h2><i class="fa-solid fa-list-check"></i> Хичээлийн Даалгаврууд</h2>
+                <div id="taskList" style="display: flex; flex-direction: column; gap: 10px;">
+                    <div class="item-card" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h4>Даалгавар 1: Хувийн веб сайт хийх</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-muted);">Дуусах хугацаа: 2026-10-01</p>
+                        </div>
+                        <span class="badge">Идэвхтэй</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. САНАЛУУД ХЭСЭГ -->
+        <section id="feedback" class="page-section">
+            <div class="card">
+                <h2><i class="fa-solid fa-comments"></i> Сурагчдын Санал Бодол</h2>
+                <form id="feedbackForm" style="margin-bottom: 2rem;">
+                    <div class="form-group">
+                        <label>Нэр (Заавал бичих шаардлагагүй):</label>
+                        <input type="text" id="fbName" placeholder="Аноним">
+                    </div>
+                    <div class="form-group">
+                        <label>Таны санал бодол, хүсэлт:</label>
+                        <textarea id="fbText" rows="3" required placeholder="Энд саналаа бичнэ үү..."></textarea>
+                    </div>
+                    <button type="submit">Санал илгээх</button>
+                </form>
+
+                <h3>Илгээсэн саналууд:</h3>
+                <div id="feedbackList" style="margin-top: 1rem; display: flex; flex-direction: column; gap: 10px;">
+                    <!-- Саналууд харагдах хэсэг -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. БАГШИЙН УДИРДЛАГЫН ХЭСЭГ (Зөвхөн нэвтэрсэн үед) -->
+        <section id="teacherPanel" class="page-section">
+            <div class="card" style="border: 2px solid var(--primary);">
+                <h2><i class="fa-solid fa-user-gear"></i> Багшийн Удирдах Хэсэг</h2>
+                <p style="margin-bottom: 1rem; color: var(--text-muted);">Эндээс хичээлийн мэдээлэл болон даалгавар нэмэх боломжтой.</p>
+
+                <div class="form-group">
+                    <label>Шинэ даалгавар нэмэх:</label>
+                    <input type="text" id="newTaskTitle" placeholder="Даалгаврын нэр" style="margin-bottom: 8px;">
+                    <button onclick="addTask()">Даалгавар нэмэх</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Багш нэвтрэх Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <h2>Багшийн Нэвтрэх</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Нууц үг: 1234</p>
+            <div class="form-group">
+                <input type="password" id="passInput" placeholder="Нууц үгээ оруулна уу">
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="loginTeacher()" style="flex: 1;">Нэвтрэх</button>
+                <button onclick="closeLoginModal()" style="background: #E5E7EB; color: #374151;">Цуцлах</button>
+            </div>
         </div>
     </div>
 
+    <footer>
+        <p>&copy; 2026 Бидний Төсөл - Ангийн Удирдлагын Систем</p>
+    </footer>
+
     <script>
-        document.getElementById('studentForm').addEventListener('submit', function(e) {
+        let isTeacher = false;
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('nav a').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(pageId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function openLoginModal() {
+            if(isTeacher) {
+                isTeacher = false;
+                document.getElementById('teacherMenu').innerText = 'Багш нэвтрэх';
+                showPage('about');
+                alert('Амжилттай гарлаа.');
+            } else {
+                document.getElementById('loginModal').style.display = 'flex';
+            }
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function loginTeacher() {
+            const pass = document.getElementById('passInput').value;
+            if(pass === '1234') {
+                isTeacher = true;
+                closeLoginModal();
+                document.getElementById('teacherMenu').innerText = 'Багшийн хэсэг';
+                showPage('teacherPanel');
+                alert('Багшаар амжилттай нэвтэрлээ!');
+            } else {
+                alert('Нууц үг буруу байна!');
+            }
+        }
+
+        // Санал илгээх хэсэг
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            const name = document.getElementById('fbName').value || 'Сурагч';
+            const text = document.getElementById('fbText').value;
 
-            const name = document.getElementById('name').value;
-            const code = document.getElementById('code').value;
-            const status = document.getElementById('status').value;
-            const grade = document.getElementById('grade').value || '-';
-
-            const table = document.getElementById('studentList');
-            const newRow = table.insertRow();
-
-            let statusClass = 'status-present';
-            if(status === 'Тасалсан') statusClass = 'status-absent';
-
-            newRow.innerHTML = `
-                <td>${code}</td>
-                <td>${name}</td>
-                <td><span class="${statusClass}">${status}</span></td>
-                <td>${grade}${grade !== '-' ? '%' : ''}</td>
-                <td><button class="btn-delete" onclick="deleteRow(this)">Усгах</button></td>
-            `;
-
-            // Форм цэвэрлэх
-            document.getElementById('studentForm').reset();
+            const list = document.getElementById('feedbackList');
+            const item = document.createElement('div');
+            item.className = 'item-card';
+            item.innerHTML = `<strong>${name}:</strong> <p style="color: var(--text-muted);">${text}</p>`;
+            
+            list.prepend(item);
+            document.getElementById('feedbackForm').reset();
+            alert('Санал амжилттай илгээгдлээ!');
         });
 
-        function deleteRow(btn) {
-            const row = btn.parentNode.parentNode;
-            row.parentNode.removeChild(row);
+        // Даалгавар нэмэх (Багш)
+        function addTask() {
+            const title = document.getElementById('newTaskTitle').value;
+            if(!title) return;
+
+            const list = document.getElementById('taskList');
+            const item = document.createElement('div');
+            item.className = 'item-card';
+            item.style = 'display: flex; justify-content: space-between; align-items: center;';
+            item.innerHTML = `
+                <div>
+                    <h4>${title}</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Шинээр нэмэгдсэн</p>
+                </div>
+                <span class="badge">Шинэ</span>
+            `;
+            list.prepend(item);
+            document.getElementById('newTaskTitle').value = '';
+            alert('Шинэ даалгавар нэмэгдлээ!');
         }
     </script>
-
 </body>
 </html>
