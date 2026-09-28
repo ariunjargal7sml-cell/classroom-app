@@ -1,10 +1,239 @@
-echo "# classroom-app" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/ariunjargal7sml-cell/classroom-app.git
-git push -u origin main
-git remote add origin https://github.com/ariunjargal7sml-cell/classroom-app.git
-git branch -M main
-git push -u origin main
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ангийн Удирдлагын Систем</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #4A90E2;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .card h2 {
+            margin-bottom: 15px;
+            color: #4A90E2;
+            font-size: 1.2rem;
+            border-bottom: 2px solid #f4f7f6;
+            padding-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #357ABD;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table th, table td {
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        table th {
+            background-color: #f8f9fa;
+            color: #555;
+        }
+
+        .status-present {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-absent {
+            color: red;
+            font-weight: bold;
+        }
+
+        .btn-delete {
+            background-color: #e74c3c;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            width: auto;
+        }
+
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🏫 Ангийн Удирдлагын Систем</h1>
+        <p>Сурагчдын бүртгэл болон ирц, дүнг удирдах веб систем</p>
+    </header>
+
+    <div class="container">
+        <!-- Сурагч нэмэх хэсэг -->
+        <div class="card">
+            <h2>➕ Шинэ сурагч бүртгэх</h2>
+            <form id="studentForm">
+                <div class="form-group">
+                    <label for="name">Овог Нэр:</label>
+                    <input type="text" id="name" placeholder="Д. Болд" required>
+                </div>
+                <div class="form-group">
+                    <label for="code">Сурагчийн код:</label>
+                    <input type="text" id="code" placeholder="ST101" required>
+                </div>
+                <div class="form-group">
+                    <label for="status">Ирцийн төлөв:</label>
+                    <select id="status">
+                        <option value="Ирсэн">Ирсэн</option>
+                        <option value="Тасалсан">Тасалсан</option>
+                        <option value="Чөлөөтэй">Чөлөөтэй</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="grade">Голч дүн:</label>
+                    <input type="number" id="grade" min="0" max="100" placeholder="85">
+                </div>
+                <button type="submit">Хадгалах</button>
+            </form>
+        </div>
+
+        <!-- Сурагчдын жагсаалт -->
+        <div class="card">
+            <h2>📋 Сурагчдын жагсаалт</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Код</th>
+                        <th>Нэр</th>
+                        <th>Ирц</th>
+                        <th>Дүн</th>
+                        <th>Үйлдэл</th>
+                    </tr>
+                </thead>
+                <tbody id="studentList">
+                    <!-- Анхны жишээ дата -->
+                    <tr>
+                        <td>ST101</td>
+                        <td>Б. Бат-Эрдэнэ</td>
+                        <td><span class="status-present">Ирсэн</span></td>
+                        <td>92%</td>
+                        <td><button class="btn-delete" onclick="deleteRow(this)">Усгах</button></td>
+                    </tr>
+                    <tr>
+                        <td>ST102</td>
+                        <td>С. Номин</td>
+                        <td><span class="status-absent">Тасалсан</span></td>
+                        <td>78%</td>
+                        <td><button class="btn-delete" onclick="deleteRow(this)">Усгах</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('studentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const code = document.getElementById('code').value;
+            const status = document.getElementById('status').value;
+            const grade = document.getElementById('grade').value || '-';
+
+            const table = document.getElementById('studentList');
+            const newRow = table.insertRow();
+
+            let statusClass = 'status-present';
+            if(status === 'Тасалсан') statusClass = 'status-absent';
+
+            newRow.innerHTML = `
+                <td>${code}</td>
+                <td>${name}</td>
+                <td><span class="${statusClass}">${status}</span></td>
+                <td>${grade}${grade !== '-' ? '%' : ''}</td>
+                <td><button class="btn-delete" onclick="deleteRow(this)">Усгах</button></td>
+            `;
+
+            // Форм цэвэрлэх
+            document.getElementById('studentForm').reset();
+        });
+
+        function deleteRow(btn) {
+            const row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+    </script>
+
+</body>
+</html>
