@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="mn">
 <head>
@@ -30,7 +31,6 @@
             min-height: 100vh;
         }
 
-        /* Nav Header */
         header {
             background-color: var(--card-bg);
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -60,7 +60,7 @@
         nav ul {
             display: flex;
             list-style: none;
-            gap: 20px;
+            gap: 15px;
         }
 
         nav a {
@@ -78,16 +78,16 @@
             background-color: #EEF2FF;
         }
 
+        .gemini-tab {
+            background: linear-gradient(135deg, #6366F1, #A855F7);
+            color: white !important;
+        }
+
         .teacher-btn {
             background-color: var(--primary);
             color: white !important;
         }
 
-        .teacher-btn:hover {
-            background-color: var(--primary-hover) !important;
-        }
-
-        /* Content Container */
         main {
             max-width: 1100px;
             margin: 2rem auto;
@@ -110,7 +110,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Cards & Grid */
         .card {
             background: var(--card-bg);
             border-radius: 12px;
@@ -127,7 +126,6 @@
             gap: 10px;
         }
 
-        /* Forms & Inputs */
         .form-group {
             margin-bottom: 1rem;
         }
@@ -148,11 +146,6 @@
             font-size: 1rem;
         }
 
-        input:focus, textarea:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
-
         button {
             background-color: var(--primary);
             color: white;
@@ -168,7 +161,6 @@
             background-color: var(--primary-hover);
         }
 
-        /* Lists & Tables */
         .grid-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -180,6 +172,7 @@
             border: 1px solid #E5E7EB;
             border-radius: 8px;
             padding: 1.2rem;
+            margin-bottom: 15px;
         }
 
         .badge {
@@ -192,7 +185,60 @@
             color: var(--primary);
         }
 
-        /* Modal */
+        .badge-mozaik {
+            background: #FEF3C7;
+            color: #D97706;
+        }
+
+        .badge-video {
+            background: #FEF2F2;
+            color: #DC2626;
+        }
+
+        .btn-link {
+            display: inline-block;
+            margin-top: 10px;
+            background-color: #10B981;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        /* AI Chat Box */
+        .chat-box {
+            background: #F3F4F6;
+            border-radius: 8px;
+            padding: 1rem;
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chat-msg {
+            padding: 10px 14px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+
+        .user-msg {
+            background: var(--primary);
+            color: white;
+            align-self: flex-end;
+        }
+
+        .ai-msg {
+            background: white;
+            color: var(--text-main);
+            align-self: flex-start;
+            border: 1px solid #E5E7EB;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -230,6 +276,7 @@
                     <li><a class="active" onclick="showPage('about')">Танилцуулга</a></li>
                     <li><a onclick="showPage('program')">Хөтөлбөр</a></li>
                     <li><a onclick="showPage('tasks')">Даалгавар</a></li>
+                    <li><a onclick="showPage('gemini')" class="gemini-tab"><i class="fa-solid fa-wand-magic-sparkles"></i> Gemini AI</a></li>
                     <li><a onclick="showPage('feedback')">Саналууд</a></li>
                     <li><a class="teacher-btn" onclick="openLoginModal()" id="teacherMenu">Багш нэвтрэх</a></li>
                 </ul>
@@ -238,98 +285,110 @@
     </header>
 
     <main>
-        <!-- 1. ТАНИЛЦУУЛГА ХЭСЭГ -->
+        <!-- 1. ТАНИЛЦУУЛГА -->
         <section id="about" class="page-section active">
             <div class="card">
                 <h2><i class="fa-solid fa-school"></i> Ангийн Танилцуулга</h2>
-                <p style="line-height: 1.6; color: var(--text-muted);" id="aboutText">
-                    Манай сургалтын системд тайвтай морилно уу. Энэхүү систем нь сурагчдын сурлагын идэвхийг дэмжих, багш болон сурагчдын хоорондын харилцааг сайжруулах зорилготой.
+                <p style="line-height: 1.6; color: var(--text-muted);">
+                    Манай сургалтын системд тавтай морилно уу. Эндээс хичээлийн даалгавар, Мозаик хичээлийн материалууд болон Gemini AI туслахтай харилцах боломжтой.
                 </p>
-            </div>
-            <div class="card">
-                <h2><i class="fa-solid fa-bullhorn"></i> Ангийн Зарлал</h2>
-                <div id="announcementList" class="grid-cards">
-                    <div class="item-card">
-                        <span class="badge">Онцлох</span>
-                        <h3 style="margin: 8px 0;">Шинэ улирлын хичээл эхэллээ</h3>
-                        <p style="font-size: 0.9rem; color: var(--text-muted);">Идэвхтэй оролцож даалгавраа хугацаанд нь хийгээрэй.</p>
-                    </div>
-                </div>
             </div>
         </section>
 
-        <!-- 2. ХӨТӨЛБӨР ХЭСЭГ -->
+        <!-- 2. ХӨТӨЛБӨР -->
         <section id="program" class="page-section">
             <div class="card">
                 <h2><i class="fa-solid fa-book-open"></i> Хичээлийн Хөтөлбөр</h2>
-                <div id="programList" class="grid-cards">
+                <div class="grid-cards">
                     <div class="item-card">
-                        <h3>1. HTML & CSS Үндэс</h3>
-                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Веб хуудасны бүтэц ба дизайн бүтээх.</p>
-                    </div>
-                    <div class="item-card">
-                        <h3>2. JavaScript Програмчлал</h3>
-                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Веб хуудсыг интерактив болгох.</p>
+                        <h3>1. Интерактив хичээлүүд</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Mozaik3D болон бусад цахим хэрэглэгдэхүүн.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 3. ДААЛГАВАР ХЭСЭГ -->
+        <!-- 3. ДААЛГАВАР -->
         <section id="tasks" class="page-section">
             <div class="card">
-                <h2><i class="fa-solid fa-list-check"></i> Хичээлийн Даалгаврууд</h2>
-                <div id="taskList" style="display: flex; flex-direction: column; gap: 10px;">
-                    <div class="item-card" style="display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <h4>Даалгавар 1: Хувийн веб сайт хийх</h4>
-                            <p style="font-size: 0.85rem; color: var(--text-muted);">Дуусах хугацаа: 2026-10-01</p>
+                <h2><i class="fa-solid fa-list-check"></i> Хичээлийн Даалгавар & Цахим Материал</h2>
+                <div id="taskList">
+                    <!-- Mozaik жишээ -->
+                    <div class="item-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h4>📦 Mozaik3D Интерактив Даалгавар</h4>
+                            <span class="badge badge-mozaik">Mozaik Web</span>
                         </div>
-                        <span class="badge">Идэвхтэй</span>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 5px;">Доорх холбоосоор орж Mozaik сургалтын платформыг ашиглан даалгавраа ажиллаарай.</p>
+                        <a href="https://www.mozaweb.com" target="_blank" class="btn-link" style="background:#D97706;"><i class="fa-solid fa-cube"></i> Mozaik руу очих</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 4. САНАЛУУД ХЭСЭГ -->
+        <!-- 4. GEMINI AI ЦЭС -->
+        <section id="gemini" class="page-section">
+            <div class="card">
+                <h2><i class="fa-solid fa-wand-magic-sparkles" style="color: #A855F7;"></i> Gemini Хичээлийн AI Туслах</h2>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">Хичээлтэй холбоотой ойлгомжгүй зүйл эсвэл асуултаа Gemini AI-аас асуугаарай.</p>
+
+                <div class="chat-box" id="chatBox">
+                    <div class="chat-msg ai-msg">Сайн байна уу! Би таны хичээлийн туслах Gemini байна. Танд ямар хичээл дээр туслах вэ?</div>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="aiInput" placeholder="Асуултаа энд бичнэ үү...">
+                    <button onclick="askGemini()" style="background: linear-gradient(135deg, #6366F1, #A855F7);"><i class="fa-solid fa-paper-plane"></i> Асуух</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. САНАЛУУД -->
         <section id="feedback" class="page-section">
             <div class="card">
                 <h2><i class="fa-solid fa-comments"></i> Сурагчдын Санал Бодол</h2>
                 <form id="feedbackForm" style="margin-bottom: 2rem;">
                     <div class="form-group">
-                        <label>Нэр (Заавал бичих шаардлагагүй):</label>
+                        <label>Нэр:</label>
                         <input type="text" id="fbName" placeholder="Аноним">
                     </div>
                     <div class="form-group">
-                        <label>Таны санал бодол, хүсэлт:</label>
+                        <label>Санал хүсэлт:</label>
                         <textarea id="fbText" rows="3" required placeholder="Энд саналаа бичнэ үү..."></textarea>
                     </div>
                     <button type="submit">Санал илгээх</button>
                 </form>
-
-                <h3>Илгээсэн саналууд:</h3>
-                <div id="feedbackList" style="margin-top: 1rem; display: flex; flex-direction: column; gap: 10px;">
-                    <!-- Саналууд харагдах хэсэг -->
-                </div>
+                <div id="feedbackList"></div>
             </div>
         </section>
 
-        <!-- 5. БАГШИЙН УДИРДЛАГЫН ХЭСЭГ (Зөвхөн нэвтэрсэн үед) -->
+        <!-- 6. БАГШИЙН УДИРДЛАГА -->
         <section id="teacherPanel" class="page-section">
             <div class="card" style="border: 2px solid var(--primary);">
                 <h2><i class="fa-solid fa-user-gear"></i> Багшийн Удирдах Хэсэг</h2>
-                <p style="margin-bottom: 1rem; color: var(--text-muted);">Эндээс хичээлийн мэдээлэл болон даалгавар нэмэх боломжтой.</p>
+                <p style="margin-bottom: 1.5rem; color: var(--text-muted);">Даалгавар эсвэл Mozaik / бусад веб сайтын линк нэмэх:</p>
 
                 <div class="form-group">
-                    <label>Шинэ даалгавар нэмэх:</label>
-                    <input type="text" id="newTaskTitle" placeholder="Даалгаврын нэр" style="margin-bottom: 8px;">
-                    <button onclick="addTask()">Даалгавар нэмэх</button>
+                    <label>Даалгаврын төрөл:</label>
+                    <select id="taskType">
+                        <option value="mozaik">Mozaik / Бусад сайт (Link)</option>
+                        <option value="video">Видео хичээл (YouTube link)</option>
+                        <option value="text">Энгийн заавар</option>
+                    </select>
                 </div>
+                <div class="form-group">
+                    <label>Даалгаврын нэр:</label>
+                    <input type="text" id="newTaskTitle" placeholder="Жишээ: Mozaik3D Биологийн даалгавар">
+                </div>
+                <div class="form-group">
+                    <label>Холбоос / Линк (URL) эсвэл Заавар:</label>
+                    <input type="text" id="newTaskContent" placeholder="https://www.mozaweb.com гэх мэт холбоос бичнэ">
+                </div>
+                <button onclick="addTask()">Даалгавар нийтлэх</button>
             </div>
         </section>
     </main>
 
-    <!-- Багш нэвтрэх Modal -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <h2>Багшийн Нэвтрэх</h2>
@@ -356,7 +415,9 @@
             document.querySelectorAll('nav a').forEach(el => el.classList.remove('active'));
 
             document.getElementById(pageId).classList.add('active');
-            event.target.classList.add('active');
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
         }
 
         function openLoginModal() {
@@ -387,7 +448,32 @@
             }
         }
 
-        // Санал илгээх хэсэг
+        // Gemini AI Чат хэсэг
+        function askGemini() {
+            const input = document.getElementById('aiInput');
+            const chatBox = document.getElementById('chatBox');
+            const question = input.value.trim();
+
+            if(!question) return;
+
+            // Сурагчийн асуулт харуулах
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-msg user-msg';
+            userMsg.innerText = question;
+            chatBox.appendChild(userMsg);
+
+            input.value = '';
+
+            // AI хариулж байгаа загвар
+            setTimeout(() => {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'chat-msg ai-msg';
+                aiMsg.innerText = `Gemini AI: "${question}" гэсэн асуултад одоогоор хичээлийн удирдамжийн дагуу судалж байна. Даалгавраа Mozaik болон багшийн оруулсан линкээс нягтална уу!`;
+                chatBox.appendChild(aiMsg);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 600);
+        }
+
         document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('fbName').value || 'Сурагч';
@@ -396,32 +482,50 @@
             const list = document.getElementById('feedbackList');
             const item = document.createElement('div');
             item.className = 'item-card';
-            item.innerHTML = `<strong>${name}:</strong> <p style="color: var(--text-muted);">${text}</p>`;
+            item.innerHTML = `<strong>${name}:</strong> <p style="color: var(--text-muted); margin-top:5px;">${text}</p>`;
             
             list.prepend(item);
             document.getElementById('feedbackForm').reset();
             alert('Санал амжилттай илгээгдлээ!');
         });
 
-        // Даалгавар нэмэх (Багш)
         function addTask() {
+            const type = document.getElementById('taskType').value;
             const title = document.getElementById('newTaskTitle').value;
-            if(!title) return;
+            const content = document.getElementById('newTaskContent').value;
+
+            if(!title || !content) {
+                alert('Мэдээллээ бүрэн оруулна уу!');
+                return;
+            }
 
             const list = document.getElementById('taskList');
             const item = document.createElement('div');
             item.className = 'item-card';
-            item.style = 'display: flex; justify-content: space-between; align-items: center;';
-            item.innerHTML = `
-                <div>
-                    <h4>${title}</h4>
-                    <p style="font-size: 0.85rem; color: var(--text-muted);">Шинээр нэмэгдсэн</p>
-                </div>
-                <span class="badge">Шинэ</span>
-            `;
+
+            if(type === 'mozaik') {
+                item.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h4>🔗 ${title}</h4>
+                        <span class="badge badge-mozaik">Mozaik / Link</span>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 5px;">Энэхүү линкээр орж даалгавраа биелүүлнэ үү.</p>
+                    <a href="${content}" target="_blank" class="btn-link" style="background:#D97706;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Материал үзэх</a>
+                `;
+            } else {
+                item.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h4>📌 ${title}</h4>
+                        <span class="badge">Энгийн</span>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 5px;">${content}</p>
+                `;
+            }
+
             list.prepend(item);
             document.getElementById('newTaskTitle').value = '';
-            alert('Шинэ даалгавар нэмэгдлээ!');
+            document.getElementById('newTaskContent').value = '';
+            alert('Шинэ даалгавар амжилттай нийтлэгдлээ!');
         }
     </script>
 </body>
