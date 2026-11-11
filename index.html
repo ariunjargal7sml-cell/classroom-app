@@ -1,46 +1,353 @@
-
 <!DOCTYPE html>
 <html lang="mn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Бидний Төсөл - Ангийн Удирдлагын Систем</title>
+    <title>Төгс Ангийн Удирдлагын Систем</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
             --primary: #4F46E5;
             --primary-hover: #4338CA;
-            --bg-light: #F9FAFB;
+            --bg-light: #F3F4F6;
             --card-bg: #FFFFFF;
             --text-main: #1F2937;
             --text-muted: #6B7280;
+            --success: #10B981;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+
+        header { background-color: var(--card-bg); box-shadow: 0 2px 4px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; }
+        .logo { font-size: 1.3rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        
+        nav ul { display: flex; list-style: none; gap: 10px; }
+        nav a { text-decoration: none; color: var(--text-muted); font-weight: 600; padding: 8px 14px; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+        nav a:hover, nav a.active { color: var(--primary); background-color: #EEF2FF; }
+        .teacher-btn { background-color: var(--primary); color: white !important; }
+
+        main { max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem; flex: 1; width: 100%; }
+        .page-section { display: none; }
+        .page-section.active { display: block; animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .card { background: var(--card-bg); border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 1.5rem; }
+        h2 { margin-bottom: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 10px; font-size: 1.3rem; }
+        
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.4rem; font-weight: 600; font-size: 0.9rem; }
+        input, textarea, select { width: 100%; padding: 10px 12px; border: 1px solid #D1D5DB; border-radius: 8px; outline: none; font-size: 1rem; }
+        input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+
+        button { background-color: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        button:hover { background-color: var(--primary-hover); }
+
+        .item-card { background: white; border: 1px solid #E5E7EB; border-radius: 8px; padding: 1.2rem; margin-bottom: 15px; }
+        .quiz-option { display: block; background: #F9FAFB; border: 1px solid #E5E7EB; padding: 10px; border-radius: 6px; margin-top: 8px; cursor: pointer; }
+        .quiz-option:hover { background: #EEF2FF; border-color: var(--primary); }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 200; }
+        .modal-content { background: white; padding: 2rem; border-radius: 12px; width: 100%; max-width: 400px; }
+        footer { text-align: center; padding: 1.5rem; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid #E5E7EB; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo"><i class="fa-solid fa-graduation-cap"></i> Ухаалаг Анги Систем</div>
+            <nav>
+                <ul>
+                    <li><a class="active" onclick="showPage('about')">Танилцуулга</a></li>
+                    <li><a onclick="showPage('program')">Хөтөлбөр</a></li>
+                    <li><a onclick="showPage('tasks')">Даалгавар & Тест</a></li>
+                    <li><a onclick="showPage('feedback')">Саналууд</a></li>
+                    <li><a class="teacher-btn" onclick="openLoginModal()" id="teacherMenu">Багш нэвтрэх</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- 1. ТАНИЛЦУУЛГА -->
+        <section id="about" class="page-section active">
+            <div class="card">
+                <h2><i class="fa-solid fa-school"></i> Ангийн Танилцуулга</h2>
+                <p id="aboutText" style="line-height: 1.6; color: var(--text-muted); font-size: 1.05rem;">
+                    Манай сургалтын системд тавтай морилно уу. Эндээс хичээлийн мэдээлэл болон онлайн тестүүдийг ажиллах боломжтой.
+                </p>
+                <div id="editAboutArea" style="display:none; margin-top: 15px;">
+                    <textarea id="editAboutInput" rows="4"></textarea>
+                    <button onclick="saveAbout()" style="margin-top: 8px;">Танилцуулга хадгалах</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. ХӨТÖЛБӨР -->
+        <section id="program" class="page-section">
+            <div class="card">
+                <h2><i class="fa-solid fa-book-open"></i> Хичээлийн Хөтөлбөр</h2>
+                <div id="programList"></div>
+                <div id="addProgramArea" style="display:none; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+                    <h3>➕ Шинэ хөтөлбөр нэмэх</h3>
+                    <div class="form-group" style="margin-top: 10px;">
+                        <input type="text" id="progTitle" placeholder="Хөтөлбөрийн нэр (Жишээ: 1-р бүлэг: Математик)">
+                    </div>
+                    <div class="form-group">
+                        <textarea id="progDesc" rows="2" placeholder="Хөтөлбөрийн тайлбар..."></textarea>
+                    </div>
+                    <button onclick="addProgram()">Хөтөлбөр нэмэх</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. ДААЛГАВАР БОЛОН ТЕСТ -->
+        <section id="tasks" class="page-section">
+            <div class="card">
+                <h2><i class="fa-solid fa-square-check"></i> Интерактив Тест ба Даалгаврууд</h2>
+                <div id="taskList"></div>
+            </div>
+        </section>
+
+        <!-- 4. САНАЛУУД -->
+        <section id="feedback" class="page-section">
+            <div class="card">
+                <h2><i class="fa-solid fa-comments"></i> Сурагчдын Санал Бодол</h2>
+                <form id="feedbackForm" style="margin-bottom: 2rem;">
+                    <div class="form-group">
+                        <label>Сурагчийн нэр:</label>
+                        <input type="text" id="fbName" placeholder="Нэр эсвэл Аноним">
+                    </div>
+                    <div class="form-group">
+                        <label>Санал хүсэлт:</label>
+                        <textarea id="fbText" rows="3" required placeholder="Энд саналаа бичнэ үү..."></textarea>
+                    </div>
+                    <button type="submit">Санал илгээх</button>
+                </form>
+                <div id="feedbackList"></div>
+            </div>
+        </section>
+
+        <!-- 5. БАГШИЙН УДИРДЛАГА -->
+        <section id="teacherPanel" class="page-section">
+            <div class="card" style="border: 2px solid var(--primary);">
+                <h2><i class="fa-solid fa-user-gear"></i> Багшийн Систем Удирдах Хэсэг</h2>
+                
+                <h3 style="margin-bottom: 10px;">📝 Шинэ Тест Үүсгэх:</h3>
+                <div class="form-group">
+                    <label>Асуулт:</label>
+                    <input type="text" id="qTitle" placeholder="Жишээ: Монгол улсын нийслэл хот юу вэ?">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <input type="text" id="qOptA" placeholder="Сонголт А">
+                    <input type="text" id="qOptB" placeholder="Сонголт Б">
+                    <input type="text" id="qOptC" placeholder="Сонголт В">
+                    <input type="text" id="qOptD" placeholder="Сонголт Г">
+                </div>
+                <div class="form-group" style="margin-top: 10px;">
+                    <label>Зөв хариулт (А, Б, В, Г гэж бичнэ үү):</label>
+                    <input type="text" id="qCorrect" placeholder="Жишээ: А">
+                </div>
+                <button onclick="createQuiz()" style="background: var(--success); width: 100%;">Тест Нийтлэх</button>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <h2>Багшийн Нэвтрэх</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Нууц үг: 1234</p>
+            <div class="form-group">
+                <input type="password" id="passInput" placeholder="Нууц үгээ оруулна уу">
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="loginTeacher()" style="flex: 1;">Нэвтрэх</button>
+                <button onclick="closeLoginModal()" style="background: #E5E7EB; color: #374151;">Цуцлах</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Ухаалаг Анги Систем - Багш ба Сурагчийн Цахим Орчин</p>
+    </footer>
+
+    <script>
+        let isTeacher = false;
+
+        // Дан мэдээллийг хадгалах бүтэц
+        let db = {
+            about: localStorage.getItem('app_about') || "Манай ангийн цахим системд тавтай морилно уу. Эндээс хичээлийн хөтөлбөр болон даалгавар, тесттэй ажиллах боломжтой.",
+            programs: JSON.parse(localStorage.getItem('app_programs')) || [
+                { title: "1. Програмчлалын үндэс", desc: "HTML, CSS ба Интерактив систем хийх заавар." }
+            ],
+            quizzes: JSON.parse(localStorage.getItem('app_quizzes')) || [],
+            feedbacks: JSON.parse(localStorage.getItem('app_feedbacks')) || []
+        };
+
+        function initData() {
+            document.getElementById('aboutText').innerText = db.about;
+            document.getElementById('editAboutInput').value = db.about;
+            renderPrograms();
+            renderQuizzes();
+            renderFeedbacks();
         }
 
-        body {
-            background-color: var(--bg-light);
-            color: var(--text-main);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('nav a').forEach(el => el.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            if (event && event.target) event.target.classList.add('active');
         }
 
-        header {
-            background-color: var(--card-bg);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+        function openLoginModal() {
+            if(isTeacher) {
+                isTeacher = false;
+                document.getElementById('teacherMenu').innerText = 'Багш нэвтрэх';
+                toggleTeacherFeatures(false);
+                showPage('about');
+                alert('Амжилттай гарлаа.');
+            } else {
+                document.getElementById('loginModal').style.display = 'flex';
+            }
         }
 
-        .nav-container {
-            max-width: 1100px;
+        function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+
+        function loginTeacher() {
+            if(document.getElementById('passInput').value === '1234') {
+                isTeacher = true;
+                closeLoginModal();
+                document.getElementById('teacherMenu').innerText = 'Багшийн Удирдах Хэсэг';
+                toggleTeacherFeatures(true);
+                showPage('teacherPanel');
+                alert('Багшаар амжилттай нэвтэрлээ!');
+            } else { alert('Нууц үг буруу байна!'); }
+        }
+
+        function toggleTeacherFeatures(show) {
+            document.getElementById('editAboutArea').style.display = show ? 'block' : 'none';
+            document.getElementById('addProgramArea').style.display = show ? 'block' : 'none';
+        }
+
+        // 1. Танилцуулга засах
+        function saveAbout() {
+            const val = document.getElementById('editAboutInput').value;
+            db.about = val;
+            localStorage.setItem('app_about', val);
+            document.getElementById('aboutText').innerText = val;
+            alert('Танилцуулга шинэчлэгдлээ!');
+        }
+
+        // 2. Хөтөлбөр
+        function renderPrograms() {
+            const list = document.getElementById('programList');
+            list.innerHTML = db.programs.map(p => `
+                <div class="item-card">
+                    <h3>${p.title}</h3>
+                    <p style="color:var(--text-muted); font-size:0.9rem; margin-top:5px;">${p.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        function addProgram() {
+            const t = document.getElementById('progTitle').value;
+            const d = document.getElementById('progDesc').value;
+            if(!t) return;
+            db.programs.push({title: t, desc: d});
+            localStorage.setItem('app_programs', JSON.stringify(db.programs));
+            renderPrograms();
+            document.getElementById('progTitle').value = '';
+            document.getElementById('progDesc').value = '';
+            alert('Хөтөлбөр нэмэгдлээ!');
+        }
+
+        // 3. Тест үүсгэх ба ажиллах
+        function createQuiz() {
+            const q = document.getElementById('qTitle').value;
+            const a = document.getElementById('qOptA').value;
+            const b = document.getElementById('qOptB').value;
+            const c = document.getElementById('qOptC').value;
+            const d = document.getElementById('qOptD').value;
+            const correct = document.getElementById('qCorrect').value.toUpperCase().trim();
+
+            if(!q || !a || !b || !correct) { alert('Мэдээллээ бүрэн оруулна уу!'); return; }
+
+            db.quizzes.push({ q, a, b, c, d, correct, id: Date.now() });
+            localStorage.setItem('app_quizzes', JSON.stringify(db.quizzes));
+            renderQuizzes();
+            alert('Шинэ тест амжилттай үүсгэгдлээ!');
+            
+            document.getElementById('qTitle').value = '';
+            document.getElementById('qOptA').value = '';
+            document.getElementById('qOptB').value = '';
+            document.getElementById('qOptC').value = '';
+            document.getElementById('qOptD').value = '';
+            document.getElementById('qCorrect').value = '';
+        }
+
+        function renderQuizzes() {
+            const list = document.getElementById('taskList');
+            if(db.quizzes.length === 0) {
+                list.innerHTML = '<p style="color:var(--text-muted);">Одоогоор оруулан тест байхгүй байна.</p>';
+                return;
+            }
+            list.innerHTML = db.quizzes.map((item, idx) => `
+                <div class="item-card">
+                    <h4>Асуулт ${idx+1}: ${item.q}</h4>
+                    <label class="quiz-option"><input type="radio" name="q_${item.id}" value="А"> А) ${item.a}</label>
+                    <label class="quiz-option"><input type="radio" name="q_${item.id}" value="Б"> Б) ${item.b}</label>
+                    ${item.c ? `<label class="quiz-option"><input type="radio" name="q_${item.id}" value="В"> В) ${item.c}</label>` : ''}
+                    ${item.d ? `<label class="quiz-option"><input type="radio" name="q_${item.id}" value="Г"> Г) ${item.d}</label>` : ''}
+                    <button onclick="checkAnswer(${item.id}, '${item.correct}')" style="margin-top:10px; background:var(--success);">Хариулт шалгах</button>
+                    <div id="res_${item.id}" style="margin-top:8px; font-weight:bold;"></div>
+                </div>
+            `).join('');
+        }
+
+        function checkAnswer(id, correct) {
+            const selected = document.querySelector(`input[name="q_${id}"]:checked`);
+            const resDiv = document.getElementById(`res_${id}`);
+            if(!selected) { alert('Хариултаас сонгоно уу!'); return; }
+
+            if(selected.value === correct) {
+                resDiv.style.color = 'green';
+                resDiv.innerText = '✅ Зөв хариуллаа! Маш сайн.';
+            } else {
+                resDiv.style.color = 'red';
+                resDiv.innerText = `❌ Буруу байна. (Зөв хариулт: ${correct})`;
+            }
+        }
+
+        // 4. Санал хүсэлт
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('fbName').value || 'Аноним';
+            const text = document.getElementById('fbText').value;
+
+            db.feedbacks.unshift({ name, text });
+            localStorage.setItem('app_feedbacks', JSON.stringify(db.feedbacks));
+            renderFeedbacks();
+            document.getElementById('feedbackForm').reset();
+            alert('Санал илгээгдлээ!');
+        });
+
+        function renderFeedbacks() {
+            const list = document.getElementById('feedbackList');
+            list.innerHTML = db.feedbacks.map(f => `
+                <div class="item-card">
+                    <strong>${f.name}:</strong>
+                    <p style="color:var(--text-muted); margin-top:4px;">${f.text}</p>
+                </div>
+            `).join('');
+        }
+
+        // Ачааллаж эхлэх
+        initData();
+    </script>
+</body>
+</html>
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
