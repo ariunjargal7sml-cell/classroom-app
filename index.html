@@ -14,6 +14,8 @@
             --text-main: #1F2937;
             --text-muted: #6B7280;
             --success: #10B981;
+            --warning: #D97706;
+            --purple: #8B5CF6;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
@@ -23,8 +25,8 @@
         .nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; }
         .logo { font-size: 1.3rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px; }
         
-        nav ul { display: flex; list-style: none; gap: 10px; }
-        nav a { text-decoration: none; color: var(--text-muted); font-weight: 600; padding: 8px 14px; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+        nav ul { display: flex; list-style: none; gap: 8px; }
+        nav a { text-decoration: none; color: var(--text-muted); font-weight: 600; padding: 8px 12px; border-radius: 6px; cursor: pointer; transition: 0.2s; font-size: 0.95rem; }
         nav a:hover, nav a.active { color: var(--primary); background-color: #EEF2FF; }
         .teacher-btn { background-color: var(--primary); color: white !important; }
 
@@ -44,9 +46,23 @@
         button { background-color: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
         button:hover { background-color: var(--primary-hover); }
 
-        .item-card { background: white; border: 1px solid #E5E7EB; border-radius: 8px; padding: 1.2rem; margin-bottom: 15px; }
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .item-card { background: white; border: 1px solid #E5E7EB; border-radius: 8px; padding: 1.2rem; margin-bottom: 15px; position: relative; }
         .quiz-option { display: block; background: #F9FAFB; border: 1px solid #E5E7EB; padding: 10px; border-radius: 6px; margin-top: 8px; cursor: pointer; }
         .quiz-option:hover { background: #EEF2FF; border-color: var(--primary); }
+
+        .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; background: #EEF2FF; color: var(--primary); }
+        .badge-video { background: #FEF2F2; color: #DC2626; }
+        .badge-link { background: #FEF3C7; color: #D97706; }
+        .badge-sim { background: #F3E8FF; color: var(--purple); }
+        
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top: 15px; border-radius: 8px; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+        .btn-link { display: inline-block; margin-top: 10px; background-color: var(--warning); color: white; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 0.9rem; font-weight: bold; }
+        .btn-sim { background-color: var(--purple); }
+        .btn-sim:hover { background-color: #7C3AED; }
+        .btn-delete { background-color: #EF4444; color: white; padding: 4px 8px; font-size: 0.8rem; position: absolute; top: 15px; right: 15px; }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 200; }
         .modal-content { background: white; padding: 2rem; border-radius: 12px; width: 100%; max-width: 400px; }
@@ -63,6 +79,7 @@
                     <li><a class="active" onclick="showPage('about')">Танилцуулга</a></li>
                     <li><a onclick="showPage('program')">Хөтөлбөр</a></li>
                     <li><a onclick="showPage('tasks')">Даалгавар & Тест</a></li>
+                    <li><a onclick="showPage('simulation')"><i class="fa-solid fa-flask"></i> Симуляци</a></li>
                     <li><a onclick="showPage('feedback')">Саналууд</a></li>
                     <li><a class="teacher-btn" onclick="openLoginModal()" id="teacherMenu">Багш нэвтрэх</a></li>
                 </ul>
@@ -76,7 +93,7 @@
             <div class="card">
                 <h2><i class="fa-solid fa-school"></i> Ангийн Танилцуулга</h2>
                 <p id="aboutText" style="line-height: 1.6; color: var(--text-muted); font-size: 1.05rem;">
-                    Манай сургалтын системд тавтай морилно уу. Эндээс хичээлийн мэдээлэл болон онлайн тестүүдийг ажиллах боломжтой.
+                    Манай сургалтын системд тавтай морилно уу. Эндээс хичээлийн мэдээлэл, онлайн тестүүд болон цахим интерактив симуляциудтай ажиллах боломжтой.
                 </p>
                 <div id="editAboutArea" style="display:none; margin-top: 15px;">
                     <textarea id="editAboutInput" rows="4"></textarea>
@@ -85,7 +102,7 @@
             </div>
         </section>
 
-        <!-- 2. ХӨТÖЛБӨР -->
+        <!-- 2. ХӨТӨЛБӨР -->
         <section id="program" class="page-section">
             <div class="card">
                 <h2><i class="fa-solid fa-book-open"></i> Хичээлийн Хөтөлбөр</h2>
@@ -93,7 +110,7 @@
                 <div id="addProgramArea" style="display:none; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
                     <h3>➕ Шинэ хөтөлбөр нэмэх</h3>
                     <div class="form-group" style="margin-top: 10px;">
-                        <input type="text" id="progTitle" placeholder="Хөтөлбөрийн нэр (Жишээ: 1-р бүлэг: Математик)">
+                        <input type="text" id="progTitle" placeholder="Хөтөлбөрийн нэр">
                     </div>
                     <div class="form-group">
                         <textarea id="progDesc" rows="2" placeholder="Хөтөлбөрийн тайлбар..."></textarea>
@@ -111,7 +128,16 @@
             </div>
         </section>
 
-        <!-- 4. САНАЛУУД -->
+        <!-- 4. СИМУЛЯЦИ ЦЭС (ШИНЭ) -->
+        <section id="simulation" class="page-section">
+            <div class="card">
+                <h2><i class="fa-solid fa-flask" style="color: var(--purple);"></i> Цахим Лаборатори ба Интерактив Симуляциуд</h2>
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Хичээлийн цахим туршилт болон 3D интерактив симуляцийн холбоосууд:</p>
+                <div id="simList" class="grid-cards"></div>
+            </div>
+        </section>
+
+        <!-- 5. САНАЛУУД -->
         <section id="feedback" class="page-section">
             <div class="card">
                 <h2><i class="fa-solid fa-comments"></i> Сурагчдын Санал Бодол</h2>
@@ -130,27 +156,69 @@
             </div>
         </section>
 
-        <!-- 5. БАГШИЙН УДИРДЛАГА -->
+        <!-- 6. БАГШИЙН УДИРДЛАГА -->
         <section id="teacherPanel" class="page-section">
             <div class="card" style="border: 2px solid var(--primary);">
                 <h2><i class="fa-solid fa-user-gear"></i> Багшийн Систем Удирдах Хэсэг</h2>
                 
-                <h3 style="margin-bottom: 10px;">📝 Шинэ Тест Үүсгэх:</h3>
                 <div class="form-group">
-                    <label>Асуулт:</label>
-                    <input type="text" id="qTitle" placeholder="Жишээ: Монгол улсын нийслэл хот юу вэ?">
+                    <label>Оруулах мэдээллийн төрөл:</label>
+                    <select id="taskType" onchange="toggleTaskForm()">
+                        <option value="sim">🔬 Цахим Симуляци / Интерактив туршилт</option>
+                        <option value="quiz">📝 Асуулттай онлайн тест</option>
+                        <option value="video">🎥 Видео хичээл (YouTube link)</option>
+                        <option value="link">🔗 Mozaik / Бусад цахим холбоос</option>
+                        <option value="text">📌 Энгийн заавар даалгавар</option>
+                    </select>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <input type="text" id="qOptA" placeholder="Сонголт А">
-                    <input type="text" id="qOptB" placeholder="Сонголт Б">
-                    <input type="text" id="qOptC" placeholder="Сонголт В">
-                    <input type="text" id="qOptD" placeholder="Сонголт Г">
+
+                <!-- Симуляцийн маягт -->
+                <div id="simFormArea">
+                    <div class="form-group">
+                        <label>Симуляцийн нэр (Жишээ: Физикийн хэлхээний туршилт / PhET):</label>
+                        <input type="text" id="simTitle" placeholder="Туршилтын нэр">
+                    </div>
+                    <div class="form-group">
+                        <label>Товч тайлбар:</label>
+                        <input type="text" id="simDesc" placeholder="Жишээ: Цахилгаан хэлхээний PhET симуляцийг ашиглан гүйдэл хэмжинэ.">
+                    </div>
+                    <div class="form-group">
+                        <label>Симуляцийн линк / Холбоос (URL):</label>
+                        <input type="text" id="simLink" placeholder="https://phet.colorado.edu/... эсвэл Mozaik линк">
+                    </div>
                 </div>
-                <div class="form-group" style="margin-top: 10px;">
-                    <label>Зөв хариулт (А, Б, В, Г гэж бичнэ үү):</label>
-                    <input type="text" id="qCorrect" placeholder="Жишээ: А">
+
+                <!-- Тестийн маягт -->
+                <div id="quizFormArea" style="display: none;">
+                    <div class="form-group">
+                        <label>Асуулт:</label>
+                        <input type="text" id="qTitle" placeholder="Жишээ: Монгол улсын нийслэл хот юу вэ?">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <input type="text" id="qOptA" placeholder="Сонголт А">
+                        <input type="text" id="qOptB" placeholder="Сонголт Б">
+                        <input type="text" id="qOptC" placeholder="Сонголт В">
+                        <input type="text" id="qOptD" placeholder="Сонголт Г">
+                    </div>
+                    <div class="form-group" style="margin-top: 10px;">
+                        <label>Зөв хариулт (А, Б, В, Г):</label>
+                        <input type="text" id="qCorrect" placeholder="Жишээ: А">
+                    </div>
                 </div>
-                <button onclick="createQuiz()" style="background: var(--success); width: 100%;">Тест Нийтлэх</button>
+
+                <!-- Холбоос эсвэл Бичлэгийн маягт -->
+                <div id="contentFormArea" style="display: none;">
+                    <div class="form-group">
+                        <label>Гарчиг:</label>
+                        <input type="text" id="cTitle" placeholder="Даалгаврын нэр">
+                    </div>
+                    <div class="form-group">
+                        <label>Холбоос (URL) эсвэл Заавар бичвэр:</label>
+                        <input type="text" id="cContent" placeholder="https://youtube.com/... эсвэл холбоос">
+                    </div>
+                </div>
+
+                <button onclick="createTask()" style="background: var(--success); width: 100%; margin-top: 10px;">Нийтлэх</button>
             </div>
         </section>
     </main>
@@ -176,13 +244,18 @@
     <script>
         let isTeacher = false;
 
-        // Дан мэдээллийг хадгалах бүтэц
         let db = {
-            about: localStorage.getItem('app_about') || "Манай ангийн цахим системд тавтай морилно уу. Эндээс хичээлийн хөтөлбөр болон даалгавар, тесттэй ажиллах боломжтой.",
-            programs: JSON.parse(localStorage.getItem('app_programs')) || [
-                { title: "1. Програмчлалын үндэс", desc: "HTML, CSS ба Интерактив систем хийх заавар." }
+            about: localStorage.getItem('app_about') || "Манай ангийн цахим системд тавтай морилно уу. Эндээс хичээлийн хөтөлбөр, даалгавар, тест болон цахим интерактив симуляцитай ажиллах боломжтой.",
+            programs: JSON.parse(localStorage.getItem('app_programs')) || [],
+            tasks: JSON.parse(localStorage.getItem('app_tasks')) || [],
+            simulations: JSON.parse(localStorage.getItem('app_simulations')) || [
+                {
+                    id: 1,
+                    title: "PhET Цахилгаан хэлхээний лаборатори",
+                    desc: "Батерей, эсэргүүцэл болон вольтметрийг ашиглан хэлхээ угсарч цахилгаан гүйдлийг туршина уу.",
+                    link: "https://phet.colorado.edu/sims/html/circuit-construction-kit-dc/latest/circuit-construction-kit-dc_all.html"
+                }
             ],
-            quizzes: JSON.parse(localStorage.getItem('app_quizzes')) || [],
             feedbacks: JSON.parse(localStorage.getItem('app_feedbacks')) || []
         };
 
@@ -190,7 +263,8 @@
             document.getElementById('aboutText').innerText = db.about;
             document.getElementById('editAboutInput').value = db.about;
             renderPrograms();
-            renderQuizzes();
+            renderTasks();
+            renderSimulations();
             renderFeedbacks();
         }
 
@@ -217,623 +291,3 @@
 
         function loginTeacher() {
             if(document.getElementById('passInput').value === '1234') {
-                isTeacher = true;
-                closeLoginModal();
-                document.getElementById('teacherMenu').innerText = 'Багшийн Удирдах Хэсэг';
-                toggleTeacherFeatures(true);
-                showPage('teacherPanel');
-                alert('Багшаар амжилттай нэвтэрлээ!');
-            } else { alert('Нууц үг буруу байна!'); }
-        }
-
-        function toggleTeacherFeatures(show) {
-            document.getElementById('editAboutArea').style.display = show ? 'block' : 'none';
-            document.getElementById('addProgramArea').style.display = show ? 'block' : 'none';
-        }
-
-        // 1. Танилцуулга засах
-        function saveAbout() {
-            const val = document.getElementById('editAboutInput').value;
-            db.about = val;
-            localStorage.setItem('app_about', val);
-            document.getElementById('aboutText').innerText = val;
-            alert('Танилцуулга шинэчлэгдлээ!');
-        }
-
-        // 2. Хөтөлбөр
-        function renderPrograms() {
-            const list = document.getElementById('programList');
-            list.innerHTML = db.programs.map(p => `
-                <div class="item-card">
-                    <h3>${p.title}</h3>
-                    <p style="color:var(--text-muted); font-size:0.9rem; margin-top:5px;">${p.desc}</p>
-                </div>
-            `).join('');
-        }
-
-        function addProgram() {
-            const t = document.getElementById('progTitle').value;
-            const d = document.getElementById('progDesc').value;
-            if(!t) return;
-            db.programs.push({title: t, desc: d});
-            localStorage.setItem('app_programs', JSON.stringify(db.programs));
-            renderPrograms();
-            document.getElementById('progTitle').value = '';
-            document.getElementById('progDesc').value = '';
-            alert('Хөтөлбөр нэмэгдлээ!');
-        }
-
-        // 3. Тест үүсгэх ба ажиллах
-        function createQuiz() {
-            const q = document.getElementById('qTitle').value;
-            const a = document.getElementById('qOptA').value;
-            const b = document.getElementById('qOptB').value;
-            const c = document.getElementById('qOptC').value;
-            const d = document.getElementById('qOptD').value;
-            const correct = document.getElementById('qCorrect').value.toUpperCase().trim();
-
-            if(!q || !a || !b || !correct) { alert('Мэдээллээ бүрэн оруулна уу!'); return; }
-
-            db.quizzes.push({ q, a, b, c, d, correct, id: Date.now() });
-            localStorage.setItem('app_quizzes', JSON.stringify(db.quizzes));
-            renderQuizzes();
-            alert('Шинэ тест амжилттай үүсгэгдлээ!');
-            
-            document.getElementById('qTitle').value = '';
-            document.getElementById('qOptA').value = '';
-            document.getElementById('qOptB').value = '';
-            document.getElementById('qOptC').value = '';
-            document.getElementById('qOptD').value = '';
-            document.getElementById('qCorrect').value = '';
-        }
-
-        function renderQuizzes() {
-            const list = document.getElementById('taskList');
-            if(db.quizzes.length === 0) {
-                list.innerHTML = '<p style="color:var(--text-muted);">Одоогоор оруулан тест байхгүй байна.</p>';
-                return;
-            }
-            list.innerHTML = db.quizzes.map((item, idx) => `
-                <div class="item-card">
-                    <h4>Асуулт ${idx+1}: ${item.q}</h4>
-                    <label class="quiz-option"><input type="radio" name="q_${item.id}" value="А"> А) ${item.a}</label>
-                    <label class="quiz-option"><input type="radio" name="q_${item.id}" value="Б"> Б) ${item.b}</label>
-                    ${item.c ? `<label class="quiz-option"><input type="radio" name="q_${item.id}" value="В"> В) ${item.c}</label>` : ''}
-                    ${item.d ? `<label class="quiz-option"><input type="radio" name="q_${item.id}" value="Г"> Г) ${item.d}</label>` : ''}
-                    <button onclick="checkAnswer(${item.id}, '${item.correct}')" style="margin-top:10px; background:var(--success);">Хариулт шалгах</button>
-                    <div id="res_${item.id}" style="margin-top:8px; font-weight:bold;"></div>
-                </div>
-            `).join('');
-        }
-
-        function checkAnswer(id, correct) {
-            const selected = document.querySelector(`input[name="q_${id}"]:checked`);
-            const resDiv = document.getElementById(`res_${id}`);
-            if(!selected) { alert('Хариултаас сонгоно уу!'); return; }
-
-            if(selected.value === correct) {
-                resDiv.style.color = 'green';
-                resDiv.innerText = '✅ Зөв хариуллаа! Маш сайн.';
-            } else {
-                resDiv.style.color = 'red';
-                resDiv.innerText = `❌ Буруу байна. (Зөв хариулт: ${correct})`;
-            }
-        }
-
-        // 4. Санал хүсэлт
-        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const name = document.getElementById('fbName').value || 'Аноним';
-            const text = document.getElementById('fbText').value;
-
-            db.feedbacks.unshift({ name, text });
-            localStorage.setItem('app_feedbacks', JSON.stringify(db.feedbacks));
-            renderFeedbacks();
-            document.getElementById('feedbackForm').reset();
-            alert('Санал илгээгдлээ!');
-        });
-
-        function renderFeedbacks() {
-            const list = document.getElementById('feedbackList');
-            list.innerHTML = db.feedbacks.map(f => `
-                <div class="item-card">
-                    <strong>${f.name}:</strong>
-                    <p style="color:var(--text-muted); margin-top:4px;">${f.text}</p>
-                </div>
-            `).join('');
-        }
-
-        // Ачааллаж эхлэх
-        initData();
-    </script>
-</body>
-</html>
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-        }
-
-        .logo {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 15px;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: var(--text-muted);
-            font-weight: 600;
-            padding: 8px 12px;
-            border-radius: 6px;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-
-        nav a:hover, nav a.active {
-            color: var(--primary);
-            background-color: #EEF2FF;
-        }
-
-        .gemini-tab {
-            background: linear-gradient(135deg, #6366F1, #A855F7);
-            color: white !important;
-        }
-
-        .teacher-btn {
-            background-color: var(--primary);
-            color: white !important;
-        }
-
-        main {
-            max-width: 1100px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
-            flex: 1;
-            width: 100%;
-        }
-
-        .page-section {
-            display: none;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        .page-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            margin-bottom: 1.5rem;
-        }
-
-        h2 {
-            margin-bottom: 1rem;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid #D1D5DB;
-            border-radius: 8px;
-            outline: none;
-            font-size: 1rem;
-        }
-
-        button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        button:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .grid-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .item-card {
-            background: white;
-            border: 1px solid #E5E7EB;
-            border-radius: 8px;
-            padding: 1.2rem;
-            margin-bottom: 15px;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            background: #EEF2FF;
-            color: var(--primary);
-        }
-
-        .badge-mozaik {
-            background: #FEF3C7;
-            color: #D97706;
-        }
-
-        .badge-video {
-            background: #FEF2F2;
-            color: #DC2626;
-        }
-
-        .btn-link {
-            display: inline-block;
-            margin-top: 10px;
-            background-color: #10B981;
-            color: white;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: bold;
-        }
-
-        /* AI Chat Box */
-        .chat-box {
-            background: #F3F4F6;
-            border-radius: 8px;
-            padding: 1rem;
-            height: 300px;
-            overflow-y: auto;
-            margin-bottom: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .chat-msg {
-            padding: 10px 14px;
-            border-radius: 8px;
-            max-width: 80%;
-        }
-
-        .user-msg {
-            background: var(--primary);
-            color: white;
-            align-self: flex-end;
-        }
-
-        .ai-msg {
-            background: white;
-            color: var(--text-main);
-            align-self: flex-start;
-            border: 1px solid #E5E7EB;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 200;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 1.5rem;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            border-top: 1px solid #E5E7EB;
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <div class="nav-container">
-            <div class="logo"><i class="fa-solid fa-graduation-cap"></i> Бидний Төсөл</div>
-            <nav>
-                <ul>
-                    <li><a class="active" onclick="showPage('about')">Танилцуулга</a></li>
-                    <li><a onclick="showPage('program')">Хөтөлбөр</a></li>
-                    <li><a onclick="showPage('tasks')">Даалгавар</a></li>
-                    <li><a onclick="showPage('gemini')" class="gemini-tab"><i class="fa-solid fa-wand-magic-sparkles"></i> Gemini AI</a></li>
-                    <li><a onclick="showPage('feedback')">Саналууд</a></li>
-                    <li><a class="teacher-btn" onclick="openLoginModal()" id="teacherMenu">Багш нэвтрэх</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <main>
-        <!-- 1. ТАНИЛЦУУЛГА -->
-        <section id="about" class="page-section active">
-            <div class="card">
-                <h2><i class="fa-solid fa-school"></i> Ангийн Танилцуулга</h2>
-                <p style="line-height: 1.6; color: var(--text-muted);">
-                    Манай сургалтын системд тавтай морилно уу. Эндээс хичээлийн даалгавар, Мозаик хичээлийн материалууд болон Gemini AI туслахтай харилцах боломжтой.
-                </p>
-            </div>
-        </section>
-
-        <!-- 2. ХӨТӨЛБӨР -->
-        <section id="program" class="page-section">
-            <div class="card">
-                <h2><i class="fa-solid fa-book-open"></i> Хичээлийн Хөтөлбөр</h2>
-                <div class="grid-cards">
-                    <div class="item-card">
-                        <h3>1. Интерактив хичээлүүд</h3>
-                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Mozaik3D болон бусад цахим хэрэглэгдэхүүн.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 3. ДААЛГАВАР -->
-        <section id="tasks" class="page-section">
-            <div class="card">
-                <h2><i class="fa-solid fa-list-check"></i> Хичээлийн Даалгавар & Цахим Материал</h2>
-                <div id="taskList">
-                    <!-- Mozaik жишээ -->
-                    <div class="item-card">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h4>📦 Mozaik3D Интерактив Даалгавар</h4>
-                            <span class="badge badge-mozaik">Mozaik Web</span>
-                        </div>
-                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 5px;">Доорх холбоосоор орж Mozaik сургалтын платформыг ашиглан даалгавраа ажиллаарай.</p>
-                        <a href="https://www.mozaweb.com" target="_blank" class="btn-link" style="background:#D97706;"><i class="fa-solid fa-cube"></i> Mozaik руу очих</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 4. GEMINI AI ЦЭС -->
-        <section id="gemini" class="page-section">
-            <div class="card">
-                <h2><i class="fa-solid fa-wand-magic-sparkles" style="color: #A855F7;"></i> Gemini Хичээлийн AI Туслах</h2>
-                <p style="color: var(--text-muted); margin-bottom: 1rem;">Хичээлтэй холбоотой ойлгомжгүй зүйл эсвэл асуултаа Gemini AI-аас асуугаарай.</p>
-
-                <div class="chat-box" id="chatBox">
-                    <div class="chat-msg ai-msg">Сайн байна уу! Би таны хичээлийн туслах Gemini байна. Танд ямар хичээл дээр туслах вэ?</div>
-                </div>
-
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="aiInput" placeholder="Асуултаа энд бичнэ үү...">
-                    <button onclick="askGemini()" style="background: linear-gradient(135deg, #6366F1, #A855F7);"><i class="fa-solid fa-paper-plane"></i> Асуух</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- 5. САНАЛУУД -->
-        <section id="feedback" class="page-section">
-            <div class="card">
-                <h2><i class="fa-solid fa-comments"></i> Сурагчдын Санал Бодол</h2>
-                <form id="feedbackForm" style="margin-bottom: 2rem;">
-                    <div class="form-group">
-                        <label>Нэр:</label>
-                        <input type="text" id="fbName" placeholder="Аноним">
-                    </div>
-                    <div class="form-group">
-                        <label>Санал хүсэлт:</label>
-                        <textarea id="fbText" rows="3" required placeholder="Энд саналаа бичнэ үү..."></textarea>
-                    </div>
-                    <button type="submit">Санал илгээх</button>
-                </form>
-                <div id="feedbackList"></div>
-            </div>
-        </section>
-
-        <!-- 6. БАГШИЙН УДИРДЛАГА -->
-        <section id="teacherPanel" class="page-section">
-            <div class="card" style="border: 2px solid var(--primary);">
-                <h2><i class="fa-solid fa-user-gear"></i> Багшийн Удирдах Хэсэг</h2>
-                <p style="margin-bottom: 1.5rem; color: var(--text-muted);">Даалгавар эсвэл Mozaik / бусад веб сайтын линк нэмэх:</p>
-
-                <div class="form-group">
-                    <label>Даалгаврын төрөл:</label>
-                    <select id="taskType">
-                        <option value="mozaik">Mozaik / Бусад сайт (Link)</option>
-                        <option value="video">Видео хичээл (YouTube link)</option>
-                        <option value="text">Энгийн заавар</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Даалгаврын нэр:</label>
-                    <input type="text" id="newTaskTitle" placeholder="Жишээ: Mozaik3D Биологийн даалгавар">
-                </div>
-                <div class="form-group">
-                    <label>Холбоос / Линк (URL) эсвэл Заавар:</label>
-                    <input type="text" id="newTaskContent" placeholder="https://www.mozaweb.com гэх мэт холбоос бичнэ">
-                </div>
-                <button onclick="addTask()">Даалгавар нийтлэх</button>
-            </div>
-        </section>
-    </main>
-
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <h2>Багшийн Нэвтрэх</h2>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Нууц үг: 1234</p>
-            <div class="form-group">
-                <input type="password" id="passInput" placeholder="Нууц үгээ оруулна уу">
-            </div>
-            <div style="display: flex; gap: 10px;">
-                <button onclick="loginTeacher()" style="flex: 1;">Нэвтрэх</button>
-                <button onclick="closeLoginModal()" style="background: #E5E7EB; color: #374151;">Цуцлах</button>
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        <p>&copy; 2026 Бидний Төсөл - Ангийн Удирдлагын Систем</p>
-    </footer>
-
-    <script>
-        let isTeacher = false;
-
-        function showPage(pageId) {
-            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('nav a').forEach(el => el.classList.remove('active'));
-
-            document.getElementById(pageId).classList.add('active');
-            if (event && event.target) {
-                event.target.classList.add('active');
-            }
-        }
-
-        function openLoginModal() {
-            if(isTeacher) {
-                isTeacher = false;
-                document.getElementById('teacherMenu').innerText = 'Багш нэвтрэх';
-                showPage('about');
-                alert('Амжилттай гарлаа.');
-            } else {
-                document.getElementById('loginModal').style.display = 'flex';
-            }
-        }
-
-        function closeLoginModal() {
-            document.getElementById('loginModal').style.display = 'none';
-        }
-
-        function loginTeacher() {
-            const pass = document.getElementById('passInput').value;
-            if(pass === '1234') {
-                isTeacher = true;
-                closeLoginModal();
-                document.getElementById('teacherMenu').innerText = 'Багшийн хэсэг';
-                showPage('teacherPanel');
-                alert('Багшаар амжилттай нэвтэрлээ!');
-            } else {
-                alert('Нууц үг буруу байна!');
-            }
-        }
-
-        // Gemini AI Чат хэсэг
-        function askGemini() {
-            const input = document.getElementById('aiInput');
-            const chatBox = document.getElementById('chatBox');
-            const question = input.value.trim();
-
-            if(!question) return;
-
-            // Сурагчийн асуулт харуулах
-            const userMsg = document.createElement('div');
-            userMsg.className = 'chat-msg user-msg';
-            userMsg.innerText = question;
-            chatBox.appendChild(userMsg);
-
-            input.value = '';
-
-            // AI хариулж байгаа загвар
-            setTimeout(() => {
-                const aiMsg = document.createElement('div');
-                aiMsg.className = 'chat-msg ai-msg';
-                aiMsg.innerText = `Gemini AI: "${question}" гэсэн асуултад одоогоор хичээлийн удирдамжийн дагуу судалж байна. Даалгавраа Mozaik болон багшийн оруулсан линкээс нягтална уу!`;
-                chatBox.appendChild(aiMsg);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 600);
-        }
-
-        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const name = document.getElementById('fbName').value || 'Сурагч';
-            const text = document.getElementById('fbText').value;
-
-            const list = document.getElementById('feedbackList');
-            const item = document.createElement('div');
-            item.className = 'item-card';
-            item.innerHTML = `<strong>${name}:</strong> <p style="color: var(--text-muted); margin-top:5px;">${text}</p>`;
-            
-            list.prepend(item);
-            document.getElementById('feedbackForm').reset();
-            alert('Санал амжилттай илгээгдлээ!');
-        });
-
-        function addTask() {
-            const type = document.getElementById('taskType').value;
-            const title = document.getElementById('newTaskTitle').value;
-            const content = document.getElementById('newTaskContent').value;
-
-            if(!title || !content) {
-                alert('Мэдээллээ бүрэн оруулна уу!');
-                return;
-            }
-
-            const list = document.getElementById('taskList');
-            const item = document.createElement('div');
-            item.className = 'item-card';
-
-            if(type === 'mozaik') {
-                item.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h4>🔗 ${title}</h4>
-                        <span class="badge badge-mozaik">Mozaik / Link</span>
-                    </div>
-                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 5px;">Энэхүү линкээр орж даалгавраа биелүүлнэ үү.</p>
-                    <a href="${content}" target="_blank" class="btn-link" style="background:#D97706;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Материал үзэх</a>
-                `;
-            } else {
-                item.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h4>📌 ${title}</h4>
-                        <span class="badge">Энгийн</span>
-                    </div>
-                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 5px;">${content}</p>
-                `;
-            }
-
-            list.prepend(item);
-            document.getElementById('newTaskTitle').value = '';
-            document.getElementById('newTaskContent').value = '';
-            alert('Шинэ даалгавар амжилттай нийтлэгдлээ!');
-        }
-    </script>
-</body>
-</html>
